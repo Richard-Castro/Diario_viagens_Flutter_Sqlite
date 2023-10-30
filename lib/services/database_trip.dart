@@ -19,7 +19,8 @@ class DatabaseTrips {
 
   Future<Database> initDatabase() async {
     final path = join(await getDatabasesPath(), dbName);
-    return openDatabase(path, version: 2, onCreate: _createDatabase);
+    return openDatabase(path,
+        version: 3, onCreate: _createDatabase, onUpgrade: _upgradeDatabase);
   }
 
   Future<void> _createDatabase(Database db, int version) async {
@@ -28,17 +29,17 @@ class DatabaseTrips {
         id INTEGER PRIMARY KEY,
         title TEXT,
         description TEXT,
-       
+        date TEXT
       )
     ''');
   }
 
-  /*Future<void> _upgradeDatabase(
+  Future<void> _upgradeDatabase(
       Database db, int oldVersion, int newVersion) async {
     if (newVersion > oldVersion) {
       await db.execute('ALTER TABLE trips ADD COLUMN date TEXT');
     }
-  }*/
+  }
 
   Future<int> insertTrip(Map<String, dynamic> trip) async {
     final db = await database;
@@ -57,12 +58,14 @@ class DatabaseTrips {
       'id': id, // Pode ser null para gerar um ID automático
       'title': trip['title'],
       'description': trip['description'],
+      'date': trip['date'],
     });
   }
 
   Future<List<Trip>> getAllTrips() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    final List<Map<String, dynamic>> maps =
+        await db.query(tableName, orderBy: 'date DESC');
     return List.generate(maps.length, (index) {
       return Trip.fromMap(maps[index]);
     });

@@ -46,11 +46,13 @@ class _MyHomeState extends State<MyHome> {
                 }),
           ],
         ),
-        body: ListView.builder(
-            itemCount: trips.length,
-            itemBuilder: (context, index) {
-              final register = trips[index];
-              return TripsWidget(register: register);
-            }));
+        body: Container(
+          child: ListView.builder(
+              itemCount: trips.length,
+              itemBuilder: (context, index) {
+                final register = trips[index];
+                return TripsWidget(register: register);
+              }),
+        ));
   }
 }

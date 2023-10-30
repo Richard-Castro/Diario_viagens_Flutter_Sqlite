@@ -8,13 +8,21 @@ class TripsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(register.title),
-          Text(register.description),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50),
+      child: ListTile(
+        title: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(register.title),
+              const SizedBox(height: 5),
+              Text(register.description),
+              const SizedBox(height: 5),
+              Text(register.date),
+            ],
+          ),
+        ),
       ),
     );
   }

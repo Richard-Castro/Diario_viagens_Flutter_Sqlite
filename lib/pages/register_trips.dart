@@ -64,12 +64,16 @@ class RegisterTripsState extends State<RegisterTrips> {
                   onPressed: () async {
                     final title = titleController.text;
                     final description = descriptionController.text;
+                    final date = dateController.text;
 
-                    if (title.isNotEmpty && description.isNotEmpty) {
+                    if (title.isNotEmpty &&
+                        description.isNotEmpty &&
+                        date.isNotEmpty) {
                       final newTrip = Trip(
                         id: 0,
                         title: title,
                         description: description,
+                        date: date,
 
                         //date: DateTime('date'),
                       ); // O 'id' pode ser 0 se você desejar que ele seja gerado automaticamente (se configurado assim no banco de dados).
