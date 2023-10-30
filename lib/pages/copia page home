@@ -1,0 +1,138 @@
+import 'package:agencia_viagens/pages/register_trips.dart';
+import 'package:agencia_viagens/services/database_trip.dart';
+import 'package:flutter/material.dart';
+
+/*class MyHome extends StatefulWidget {
+  const MyHome({super.key});
+  @override
+  State<MyHome> createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
+  final DatabaseTrips dbTrips = DatabaseTrips();
+  List<Map<String, dynamic>> trips = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPeopleFromDatabase();
+  }
+
+  Future<void> _loadPeopleFromDatabase() async {
+    final tripsList = await dbTrips.getAllTrips();
+    setState(() {
+      trips = tripsList;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lista de Pessoas'),
+      ),
+      body: ListView.builder(
+        itemCount: trips.length,
+        itemBuilder: (context, index) {
+          final gete = trips[index];
+          return ListTile(
+            title: Text('${gete['title']} ${gete['description']}'),
+          );
+        },
+      ),
+    );
+  }
+}
+
+*/
+class MyHome extends StatefulWidget {
+  const MyHome({super.key});
+
+  @override
+  State<MyHome> createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
+  final DatabaseTrips dbTrips = DatabaseTrips();
+  List<Map<String, dynamic>> trips = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTripsFromDatabase();
+  }
+
+  Future<void> _loadTripsFromDatabase() async {
+    final tripsList = await dbTrips.getAllTrips();
+    setState(() {
+      trips = tripsList;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text("Diario de Viagens")),
+        body: Container(
+            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            width: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start, //spaceAround (s
+                children: [
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(Icons.add),
+                      Text("Adicionar Viagem"),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ListView.builder(
+                    itemCount: trips.length,
+                    itemBuilder: (context, index) {
+                      final register = trips[index];
+                      return ListTile(
+                        title: Text(
+                            '${register['title']} ${register['description']}'),
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Viagem: Viagem para Paris"),
+                        const Text("Descrição: Conhecendo a Torre Eiffel"),
+                        Image.asset('assets/paris.jpg'),
+                      ]),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Viagem: Viagem para Paris"),
+                        const Text("Descrição: Conhecendo a Torre Eiffel"),
+                        Image.asset('assets/paris.jpg'),
+                      ]),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Viagem: Viagem para Paris"),
+                        const Text("Descrição: Conhecendo a Torre Eiffel"),
+                        Image.asset('assets/paris.jpg'),
+                      ]),
+                ],
+              ),
+            )));
+  }
+}//*/
