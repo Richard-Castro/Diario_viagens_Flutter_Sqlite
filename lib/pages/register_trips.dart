@@ -53,7 +53,7 @@ class RegisterTripsState extends State<RegisterTrips> {
                 TextField(
                   controller: dateController,
                   decoration: const InputDecoration(
-                    hintText: "Data da viagem",
+                    hintText: "Escreva uma descrição sobre a viagem",
                   ),
                 ),
                 TextButton(
@@ -76,12 +76,11 @@ class RegisterTripsState extends State<RegisterTrips> {
                         date: date,
 
                         //date: DateTime('date'),
-                      ); // O 'id' pode ser 0 se você desejar que ele seja gerado automaticamente (se configurado assim no banco de dados).
+                      );
                       await dbTrips.insertTrip(newTrip.toMap());
 
                       titleController.clear();
                       descriptionController.clear();
-                      dateController.clear();
 
                       ScaffoldMessenger.of(scaffoldContext).showSnackBar(
                         // Use the captured context

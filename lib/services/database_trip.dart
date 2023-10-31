@@ -19,8 +19,11 @@ class DatabaseTrips {
 
   Future<Database> initDatabase() async {
     final path = join(await getDatabasesPath(), dbName);
-    return openDatabase(path,
-        version: 3, onCreate: _createDatabase, onUpgrade: _upgradeDatabase);
+    return openDatabase(
+      path,
+      version: 3,
+      onCreate: _createDatabase,
+    );
   }
 
   Future<void> _createDatabase(Database db, int version) async {
@@ -34,28 +37,19 @@ class DatabaseTrips {
     ''');
   }
 
-  Future<void> _upgradeDatabase(
-      Database db, int oldVersion, int newVersion) async {
-    if (newVersion > oldVersion) {
-      await db.execute('ALTER TABLE trips ADD COLUMN date TEXT');
-    }
-  }
-
   Future<int> insertTrip(Map<String, dynamic> trip) async {
     final db = await database;
     int? id = trip['id'];
+    String date = trip['date']; // Deve estar no formato 'YYYY-MM-DD'
 
-    // Verificar se o ID já existe
     final existingTrip =
         await db.query(tableName, where: 'id = ?', whereArgs: [id]);
     if (existingTrip.isNotEmpty) {
-      // O ID já existe, gerar um novo ID exclusivo
       id = null;
     }
 
-    // Inserir o registro com o ID (ou um novo ID gerado automaticamente)
     return await db.insert(tableName, {
-      'id': id, // Pode ser null para gerar um ID automático
+      'id': id,
       'title': trip['title'],
       'description': trip['description'],
       'date': trip['date'],

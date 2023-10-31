@@ -1,5 +1,9 @@
+// ignore_for_file: unused_import
+
 import 'package:agencia_viagens/models/trips_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class TripsWidget extends StatelessWidget {
   final Trip register;
@@ -19,7 +23,9 @@ class TripsWidget extends StatelessWidget {
               const SizedBox(height: 5),
               Text(register.description),
               const SizedBox(height: 5),
-              Text(register.date),
+              Text(
+                (register.date),
+              ),
             ],
           ),
         ),
