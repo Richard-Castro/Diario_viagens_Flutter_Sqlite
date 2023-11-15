@@ -9,9 +9,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SQLITE',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.dark(
+          //primarySwatch: Colors.blue,
+          ),
 
       //textTheme: GoogleFonts.robotoTextTheme()),
       home: const MyHome(),
