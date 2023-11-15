@@ -84,4 +84,28 @@ class DatabaseTrips {
       return Trip.fromMap(maps[index]);
     });
   }
+
+  Future<int> updateTrip(Map<String, dynamic> trip) async {
+    final db = await database;
+    int id = trip['id'];
+
+    return await db.update(
+      tableName,
+      {
+        'title': trip['title'],
+        'description': trip['description'],
+        'date': trip['date'],
+        'startDate': trip['startDate'],
+        'endDate': trip['endDate'],
+        'imagePath': trip['imagePath'],
+      },
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> deleteTrip(int? id) async {
+    final db = await database;
+    return await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+  }
 }
