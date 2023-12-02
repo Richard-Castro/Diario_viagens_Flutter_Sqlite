@@ -1,7 +1,7 @@
 import 'package:agencia_viagens/components/trips_widget.dart';
 import 'package:agencia_viagens/models/trips_model.dart';
 import 'package:agencia_viagens/pages/register_trips.dart';
-import 'package:agencia_viagens/services/database_trip.dart';
+import 'package:agencia_viagens/services/database.dart';
 import 'package:flutter/material.dart';
 
 class MyHome extends StatefulWidget {
@@ -12,8 +12,8 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  final DatabaseTrips dbTrips = DatabaseTrips();
-  List<Trip> trips = [];
+  final DatabasesTrips dbTrips = DatabasesTrips();
+  List<Trips> trips = [];
 
   @override
   void initState() {

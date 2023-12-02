@@ -1,20 +1,23 @@
 import 'dart:io';
 
-import 'package:agencia_viagens/models/trips_model.dart';
+import 'package:agencia_viagens/models/details_model.dart';
 import 'package:agencia_viagens/components/image_input.dart';
-import '../services/database.dart';
+import 'package:agencia_viagens/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class RegisterTrips extends StatefulWidget {
-  const RegisterTrips({Key? key}) : super(key: key);
+class RegisterDetailsTrips extends StatefulWidget {
+  final int? tripId;
+
+  RegisterDetailsTrips({Key? key, required this.tripId}) : super(key: key);
 
   @override
-  RegisterTripsState createState() => RegisterTripsState();
+  RegisterDetailsTripsState createState() => RegisterDetailsTripsState();
 }
 
-class RegisterTripsState extends State<RegisterTrips> {
-  final DatabasesTrips dbTrips = DatabasesTrips();
+class RegisterDetailsTripsState extends State<RegisterDetailsTrips> {
+  final DatabasesTrips dbDetails = DatabasesTrips();
+
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   String? selectedStartDate;
@@ -54,7 +57,8 @@ class RegisterTripsState extends State<RegisterTrips> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Cadastro de Viagens")),
+      appBar:
+          AppBar(title: Text("Cadastro detalhes da Viagens ${widget.tripId}")),
       body: Builder(
         builder: (BuildContext scaffoldContext) {
           return Container(
@@ -65,7 +69,6 @@ class RegisterTripsState extends State<RegisterTrips> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 TextField(
-                  
                   controller: titleController,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.title, color: Colors.blue),
@@ -219,17 +222,17 @@ class RegisterTripsState extends State<RegisterTrips> {
                       if (title.isNotEmpty &&
                           description.isNotEmpty &&
                           selectedStartDate != null &&
-                          selectedEndDate != null &&
-                          _selectedImage != null) {
-                        final newTrip = Trips(
+                          selectedEndDate != null) {
+                        final newTrip = Details(
                           id: 0,
+                          tripId: widget.tripId,
                           title: title,
                           description: description,
                           startDate: selectedStartDate!,
                           endDate: selectedEndDate!,
                           imagePath: _selectedImage.path,
                         );
-                        await dbTrips.insertTrips(newTrip.toMap());
+                        await dbDetails.insertDetails(newTrip.toMap());
 
                         titleController.clear();
                         descriptionController.clear();

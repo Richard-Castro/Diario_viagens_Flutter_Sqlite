@@ -1,7 +1,6 @@
-// ignore_for_file: unused_import
-
 import 'dart:io';
 
+import 'package:agencia_viagens/models/details_model.dart';
 import 'package:agencia_viagens/models/trips_model.dart';
 import 'package:agencia_viagens/pages/details_trips.dart';
 import '../services/database.dart';
@@ -10,13 +9,10 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class TripsWidget extends StatelessWidget {
-  final Trips register;
+class DetailWidget extends StatelessWidget {
+  final Details detail;
   final DatabasesTrips dbTrips = DatabasesTrips();
-  TripsWidget({required this.register});
-
-  // var detailsTrips = Trip(
-  //   title: '', description: '', startDate: '', endDate: '', imagePath: '');
+  DetailWidget({required this.detail});
 
   @override
   Widget build(BuildContext context) {
@@ -24,48 +20,17 @@ class TripsWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Dismissible(
         onDismissed: (DismissDirection dismissDirection) async {
-          await dbTrips.deleteTrips(register.id);
+          await dbTrips.deleteTrips(detail.id);
         },
-        // onDismissed: (direction) async {
-        //   // Aqui você pode implementar a lógica para excluir o item ou fazer outra ação
-        //   if (direction == DismissDirection.endToStart) {
-        //     await dbTrips.updateTrips(register.id);
-        //     // Implemente a lógica para editar o item
-        //   } else if (direction == DismissDirection.startToEnd) {
-        //     await dbTrips.deleteTrips(register.id);
-        //     // Implemente a lógica para excluir o item
-        //   }
-        // },
         background: Container(
           color: Colors.red,
           alignment: Alignment.center,
           padding: EdgeInsets.only(left: 16),
           child: Icon(Icons.delete, color: Colors.white),
         ),
-        secondaryBackground: Container(
-          color: Colors.orange,
-          child: const Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-        key: Key(register.id.toString()),
+        key: Key(detail.id.toString()),
         child: ListTile(
           title: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsTripsPage(
-                            register: register,
-                          )));
-            },
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
@@ -80,27 +45,27 @@ class TripsWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            register.title,
+                            detail.title,
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            register.description,
+                            detail.description,
                             style: const TextStyle(fontSize: 15),
                           ),
                           const SizedBox(height: 20),
                           Row(
                             children: [
                               Text(
-                                register.startDate,
+                                detail.startDate,
                                 style: const TextStyle(fontSize: 12),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                register.endDate,
+                                detail.endDate,
                                 style: const TextStyle(fontSize: 12),
                               ),
                             ],
@@ -112,14 +77,14 @@ class TripsWidget extends StatelessWidget {
                   ),
                   // Exibição da imagem
 
-                  register.imagePath != null && register.imagePath!.isNotEmpty
+                  detail.imagePath != null && detail.imagePath!.isNotEmpty
                       ? ClipRRect(
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(6.0),
                             bottomRight: Radius.circular(6.0),
                           ),
                           child: Image.file(
-                            File(register.imagePath!),
+                            File(detail.imagePath!),
                             height: 150, // Ajuste a altura conforme necessário
                             width: 180, // Ajuste a largura conforme necessário
                             fit: BoxFit.cover,
