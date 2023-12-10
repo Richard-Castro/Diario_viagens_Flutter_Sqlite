@@ -19,7 +19,8 @@ class RegisterTripsState extends State<RegisterTrips> {
   final descriptionController = TextEditingController();
   String? selectedStartDate;
   String? selectedEndDate;
-  late File _selectedImage; // New field for selected image
+  late File _selectedImage;
+ 
 
   Future<void> _selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -51,6 +52,8 @@ class RegisterTripsState extends State<RegisterTrips> {
     }
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +68,6 @@ class RegisterTripsState extends State<RegisterTrips> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 TextField(
-                  
                   controller: titleController,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.title, color: Colors.blue),

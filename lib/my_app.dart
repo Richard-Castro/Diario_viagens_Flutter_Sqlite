@@ -1,4 +1,5 @@
 import 'package:agencia_viagens/pages/home.dart';
+import 'package:agencia_viagens/pages/main_page.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
           ),
 
       //textTheme: GoogleFonts.robotoTextTheme()),
-      home: const MyHome(),
+      home: const MainPage(),
     );
   }
 }

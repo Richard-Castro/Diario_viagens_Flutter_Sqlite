@@ -141,6 +141,53 @@ class DatabasesTrips {
   //   }
   // }
 
+  Future<Trips> getTripById(int id) async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      tripsTableName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return Trips.fromMap(maps.first);
+    } else {
+      return Trips(
+        id: 0,
+        title: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        imagePath: '',
+      ); // Retorna nulo se não encontrar nenhum registro com o ID específico
+    }
+  }
+
+  Future<Details> getDetailsById(int id) async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      detailsTableName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return Details.fromMap(maps.first);
+    } else {
+      return Details(
+        id: 0,
+        tripId: 0,
+        title: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        imagePath: '',
+      );
+    }
+  }
+
   Future<List<Trips>> getAllTrips() async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
@@ -166,6 +213,18 @@ class DatabasesTrips {
     return await db.update(
       tripsTableName,
       trip,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> updateDetails(Map<String, dynamic> detail) async {
+    final db = await database;
+    int? id = detail['id'] ?? 0;
+
+    return await db.update(
+      detailsTableName,
+      detail,
       where: 'id = ?',
       whereArgs: [id],
     );

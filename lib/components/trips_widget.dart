@@ -2,7 +2,9 @@
 
 import 'dart:io';
 
+import 'package:agencia_viagens/components/auth_trips.dart';
 import 'package:agencia_viagens/models/trips_model.dart';
+import 'package:agencia_viagens/pages/alter_trips.dart';
 import 'package:agencia_viagens/pages/details_trips.dart';
 import '../services/database.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,28 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 class TripsWidget extends StatelessWidget {
   final Trips register;
   final DatabasesTrips dbTrips = DatabasesTrips();
+  final Authentication authTrips = Authentication();
   TripsWidget({required this.register});
+
+  Future<void> _editTodo(BuildContext context) async {
+    bool auth = await Authentication.authentication();
+
+    if (auth) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AlterTrips(id: register.id),
+        ),
+      );
+    }
+  }
+
+  Future<void> _deleteTodo() async {
+    bool auth = await Authentication.authentication();
+    if (auth) {
+      await dbTrips.deleteTrips(register.id);
+    }
+  }
 
   // var detailsTrips = Trip(
   //   title: '', description: '', startDate: '', endDate: '', imagePath: '');
@@ -23,19 +46,17 @@ class TripsWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Dismissible(
-        onDismissed: (DismissDirection dismissDirection) async {
-          await dbTrips.deleteTrips(register.id);
+        onDismissed: (direction) async {
+          if (direction == DismissDirection.endToStart) {
+            await _editTodo(context);
+            // Implemente a lógica para editar o item
+          } else if (direction == DismissDirection.startToEnd) {
+            await _deleteTodo();
+            // Implemente a lógica para excluir o item
+          }
+
+          print('Falha na autenticação. A exclusão não é permitida.');
         },
-        // onDismissed: (direction) async {
-        //   // Aqui você pode implementar a lógica para excluir o item ou fazer outra ação
-        //   if (direction == DismissDirection.endToStart) {
-        //     await dbTrips.updateTrips(register.id);
-        //     // Implemente a lógica para editar o item
-        //   } else if (direction == DismissDirection.startToEnd) {
-        //     await dbTrips.deleteTrips(register.id);
-        //     // Implemente a lógica para excluir o item
-        //   }
-        // },
         background: Container(
           color: Colors.red,
           alignment: Alignment.center,
