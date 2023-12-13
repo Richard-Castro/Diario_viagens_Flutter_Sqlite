@@ -3,6 +3,7 @@ import 'package:agencia_viagens/models/trips_model.dart';
 import 'package:agencia_viagens/pages/register_trips.dart';
 import 'package:agencia_viagens/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -30,12 +31,15 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime currentDate = DateTime.now();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Diario de Viagens"),
           actions: <Widget>[
             IconButton(
-                icon: const Icon(Icons.add),
+                icon: const Icon(
+                  Icons.add_circle,
+                ),
                 onPressed: () async {
                   await Navigator.push(
                       context,
@@ -51,7 +55,15 @@ class _MyHomeState extends State<MyHome> {
               itemCount: trips.length,
               itemBuilder: (context, index) {
                 final register = trips[index];
-                return TripsWidget(register: register);
+                if (register.endDate != null) {
+                  DateTime endDate =
+                      DateFormat('dd/MM/yyyy').parse(register.endDate!);
+
+                  if (endDate.isBefore(currentDate)) {
+                    return TripsWidget(register: register);
+                  }
+                }
+                return Container();
               }),
         ));
   }

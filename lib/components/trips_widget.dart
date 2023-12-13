@@ -12,35 +12,42 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class TripsWidget extends StatelessWidget {
+class TripsWidget extends StatefulWidget {
   final Trips register;
-  final DatabasesTrips dbTrips = DatabasesTrips();
-  final Authentication authTrips = Authentication();
+
   TripsWidget({required this.register});
 
-  Future<void> _editTodo(BuildContext context) async {
-    bool auth = await Authentication.authentication();
+  @override
+  State<TripsWidget> createState() => _TripsWidgetState();
+}
 
-    if (auth) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AlterTrips(id: register.id),
-        ),
-      );
-    }
+class _TripsWidgetState extends State<TripsWidget> {
+  final DatabasesTrips dbTrips = DatabasesTrips();
+
+  final Authentication authTrips = Authentication();
+
+  Future<void> _editTodo(BuildContext context) async {
+    //bool auth = await Authentication.authentication();
+
+    // if (auth) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AlterTrips(id: widget.register.id),
+      ),
+    );
+    //s}
   }
 
   Future<void> _deleteTodo() async {
     bool auth = await Authentication.authentication();
     if (auth) {
-      await dbTrips.deleteTrips(register.id);
+      await dbTrips.deleteTrips(widget.register.id);
+     
     }
   }
 
   // var detailsTrips = Trip(
-  //   title: '', description: '', startDate: '', endDate: '', imagePath: '');
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,10 +56,8 @@ class TripsWidget extends StatelessWidget {
         onDismissed: (direction) async {
           if (direction == DismissDirection.endToStart) {
             await _editTodo(context);
-            // Implemente a lógica para editar o item
           } else if (direction == DismissDirection.startToEnd) {
             await _deleteTodo();
-            // Implemente a lógica para excluir o item
           }
 
           print('Falha na autenticação. A exclusão não é permitida.');
@@ -76,7 +81,7 @@ class TripsWidget extends StatelessWidget {
             ),
           ),
         ),
-        key: Key(register.id.toString()),
+        key: Key(widget.register.id.toString()),
         child: ListTile(
           title: InkWell(
             onTap: () {
@@ -84,7 +89,7 @@ class TripsWidget extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => DetailsTripsPage(
-                            register: register,
+                            register: widget.register,
                           )));
             },
             child: Card(
@@ -96,33 +101,40 @@ class TripsWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            register.title,
+                            widget.register.title,
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           Text(
-                            register.description,
-                            style: const TextStyle(fontSize: 15),
+                            widget.register.description,
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w700),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 30),
                           Row(
                             children: [
                               Text(
-                                register.startDate,
-                                style: const TextStyle(fontSize: 12),
+                                widget.register.startDate,
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                register.endDate,
-                                style: const TextStyle(fontSize: 12),
+                                widget.register.endDate,
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey),
                               ),
                             ],
                           ),
@@ -133,15 +145,16 @@ class TripsWidget extends StatelessWidget {
                   ),
                   // Exibição da imagem
 
-                  register.imagePath != null && register.imagePath!.isNotEmpty
+                  widget.register.imagePath != null &&
+                          widget.register.imagePath!.isNotEmpty
                       ? ClipRRect(
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(6.0),
                             bottomRight: Radius.circular(6.0),
                           ),
                           child: Image.file(
-                            File(register.imagePath!),
-                            height: 150, // Ajuste a altura conforme necessário
+                            File(widget.register.imagePath!),
+                            height: 200, // Ajuste a altura conforme necessário
                             width: 180, // Ajuste a largura conforme necessário
                             fit: BoxFit.cover,
                           ),

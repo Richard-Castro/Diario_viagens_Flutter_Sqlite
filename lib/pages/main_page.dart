@@ -43,7 +43,7 @@ class _MainPageState extends State<MainPage> {
                   BottomNavigationBarItem(
                       label: "Home", icon: Icon(Icons.home)),
                   BottomNavigationBarItem(
-                      label: "Processo", icon: Icon(Icons.circle)),
+                      label: "Processo", icon: Icon(Icons.auto_mode)),
                 ])
           ],
         ),

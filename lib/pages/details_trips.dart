@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:agencia_viagens/components/auth_trips.dart';
 import 'package:agencia_viagens/components/details_widget.dart';
-import 'package:agencia_viagens/components/view_details.dart';
 import 'package:agencia_viagens/models/details_model.dart';
 import 'package:agencia_viagens/models/trips_model.dart';
+import 'package:agencia_viagens/pages/alter_details.dart';
 import 'package:agencia_viagens/pages/register_details_trips.dart';
 import '../services/database.dart';
 import 'package:flutter/material.dart';
@@ -47,13 +49,34 @@ class _DetailsTripsPageState extends State<DetailsTripsPage> {
     });
   }
 
+  Future<void> _editTodo(BuildContext context, Details detail) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AlterDetails(
+          id: detail.id,
+          tripId: detail.tripId,
+        ),
+      ),
+    );
+    _loadDetailsFromDatabase();
+  }
+
+  Future<void> _deleteTodo(Details detail) async {
+    bool auth = await Authentication.authentication();
+    if (auth) {
+      await dbTrips.deleteDetails(detail.id);
+      _loadDetailsFromDatabase(); // Atualiza a lista após a exclusão
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.add_circle),
               onPressed: () async {
                 final tripId = widget.register.id;
 
@@ -75,12 +98,18 @@ class _DetailsTripsPageState extends State<DetailsTripsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.register.title,
-                style:
-                    const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Icon(Icons.location_city),
+                  SizedBox(width: 8),
+                  Text(
+                    widget.register.title,
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 25),
               Text(
                 widget.register.description,
                 style: const TextStyle(fontSize: 20),
@@ -89,19 +118,21 @@ class _DetailsTripsPageState extends State<DetailsTripsPage> {
               Row(
                 children: [
                   Text(
-                    widget.register.startDate,
-                    style: const TextStyle(fontSize: 15),
+                    'Início: ${widget.register.startDate}',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 202, 202, 202),
+                    ),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  const Text("até"),
-                  const SizedBox(
-                    width: 15,
-                  ),
+                  const SizedBox(width: 10),
                   Text(
-                    widget.register.endDate,
-                    style: const TextStyle(fontSize: 15),
+                    'Fim: ${widget.register.endDate}',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 202, 202, 202),
+                    ),
                   ),
                 ],
               ),
@@ -119,12 +150,20 @@ class _DetailsTripsPageState extends State<DetailsTripsPage> {
                     )
                   : Container(),
               const SizedBox(
-                height: 30,
+                height: 50,
               ),
-              Text(
-                "Mais detalhes da viagem : ${widget.register.title}",
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Icon(Icons.dehaze),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    "Mais detalhes da viagem",
+                    style: const TextStyle(
+                        fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ],
           ),
@@ -143,7 +182,103 @@ class _DetailsTripsPageState extends State<DetailsTripsPage> {
                   .toList();
               final detail = filteredDetails[index];
 
-              return DetailWidget(detail: detail);
+              return InkWell(
+                onLongPress: () {
+                  // Aqui você pode adicionar a lógica para editar o registro
+                  _editTodo(context, detail);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Dismissible(
+                    onDismissed: (direction) async {
+                      if (direction == DismissDirection.endToStart) {
+                        await _deleteTodo(detail);
+                      }
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: 16),
+                      child: Icon(Icons.delete, color: Colors.white),
+                    ),
+                    key: Key(detail.id.toString()),
+                    child: ListTile(
+                      title: InkWell(
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6)),
+                          elevation: 8,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        detail.title,
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        detail.description,
+                                        style: const TextStyle(fontSize: 15),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            detail.startDate,
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            detail.endDate,
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // Exibição da imagem
+
+                              detail.imagePath != null &&
+                                      detail.imagePath!.isNotEmpty
+                                  ? ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(6.0),
+                                        bottomRight: Radius.circular(6.0),
+                                      ),
+                                      child: Image.file(
+                                        File(detail.imagePath!),
+                                        height:
+                                            150, // Ajuste a altura conforme necessário
+                                        width:
+                                            180, // Ajuste a largura conforme necessário
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
             },
           ),
         ),
