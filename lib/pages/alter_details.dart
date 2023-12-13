@@ -25,7 +25,7 @@ class AlterDetailsState extends State<AlterDetails> {
   String? selectedStartDate;
   String? selectedEndDate;
 
-  late File _selectedImage;
+  late File _selectedImage = File('');
 
   List<Details> details = [];
 
@@ -99,9 +99,7 @@ class AlterDetailsState extends State<AlterDetails> {
         descriptionController.text = detail.description;
         selectedStartDate = detail.startDate;
         selectedEndDate = detail.endDate;
-        if (detail.imagePath != null && detail.imagePath.isNotEmpty) {
-          _selectedImage = File(detail.imagePath);
-        }
+        _selectedImage = File(detail.imagePath);
       });
     }
   }
@@ -116,7 +114,6 @@ class AlterDetailsState extends State<AlterDetails> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pop();
-
         return false;
       },
       child: Scaffold(
@@ -296,7 +293,7 @@ class AlterDetailsState extends State<AlterDetails> {
                               description.isNotEmpty &&
                               selectedStartDate != null &&
                               selectedEndDate != null &&
-                              _selectedImage != null) {
+                              _selectedImage.path.isNotEmpty) {
                             final newTrip = Details(
                               id: widget.id,
                               tripId: widget.tripId,

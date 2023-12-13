@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:agencia_viagens/models/trips_model.dart';
 import 'package:agencia_viagens/components/image_input.dart';
-import 'package:agencia_viagens/pages/home.dart';
+import 'package:agencia_viagens/pages/main_page.dart';
 import '../services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +21,7 @@ class AlterTripsState extends State<AlterTrips> {
   final descriptionController = TextEditingController();
   String? selectedStartDate;
   String? selectedEndDate;
-  late File _selectedImage;
+  late File _selectedImage = File('');
   List<Trips> trips = []; // New field for selected image
 
   Future<void> _selectStartDate(BuildContext context) async {
@@ -108,12 +108,6 @@ class AlterTripsState extends State<AlterTrips> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pop();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyHome(),
-          ),
-        );
         return false;
       },
       child: Scaffold(
@@ -138,7 +132,6 @@ class AlterTripsState extends State<AlterTrips> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     TextField(
                       controller: descriptionController,
                       decoration: const InputDecoration(
@@ -250,7 +243,6 @@ class AlterTripsState extends State<AlterTrips> {
                     const SizedBox(
                       height: 20,
                     ),
-
                     Row(
                       children: [
                         Expanded(
@@ -262,7 +254,6 @@ class AlterTripsState extends State<AlterTrips> {
                         ),
                       ],
                     ),
-                    // ImageInput widget for capturing or selecting images
                     const SizedBox(
                       height: 30,
                     ),
@@ -290,9 +281,9 @@ class AlterTripsState extends State<AlterTrips> {
                               description.isNotEmpty &&
                               selectedStartDate != null &&
                               selectedEndDate != null &&
-                              _selectedImage != null) {
+                              _selectedImage.path.isNotEmpty) {
                             final newTrip = Trips(
-                              id: 0,
+                              id: widget.id,
                               title: title,
                               description: description,
                               startDate: selectedStartDate!,
@@ -310,6 +301,7 @@ class AlterTripsState extends State<AlterTrips> {
                                 content: Text('Viagem adicionada com sucesso!'),
                               ),
                             );
+                            Navigator.pop(context);
                           } else {
                             await ScaffoldMessenger.of(scaffoldContext)
                                 .showSnackBar(
@@ -319,15 +311,6 @@ class AlterTripsState extends State<AlterTrips> {
                               ),
                             );
                           }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                _loadTripsFromDatabase();
-                                return MyHome();
-                              },
-                            ),
-                          );
                         },
                         child: const Text('Salvar',
                             style: TextStyle(fontSize: 20)),
