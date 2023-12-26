@@ -1,16 +1,14 @@
 # agencia_viagens
 
-A new Flutter project.
+Aplicativo utilizando Flutter e Sqlite - Aprendizagem
 
-## Getting Started
+![WhatsApp Image 2023-12-26 at 19 46 03](https://github.com/Richard-Castro/Diario_viagens_Flutter_Sqlite/assets/25597344/9461f429-8976-4828-bfa3-fcabbab0d5af)
 
-This project is a starting point for a Flutter application.
+![WhatsApp Image 2023-12-26 at 19 42 42 (1)](https://github.com/Richard-Castro/Diario_viagens_Flutter_Sqlite/assets/25597344/594e88d9-35e9-4f9d-ad35-f79ade2df991)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![WhatsApp Image 2023-12-26 at 19 42 43](https://github.com/Richard-Castro/Diario_viagens_Flutter_Sqlite/assets/25597344/c5502564-294e-41f0-9227-54ea9dcbfb4a)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![WhatsApp Image 2023-12-26 at 19 42 43 (1)](https://github.com/Richard-Castro/Diario_viagens_Flutter_Sqlite/assets/25597344/467a9004-96d1-47b4-930b-ab9b3f161560)
+
+
